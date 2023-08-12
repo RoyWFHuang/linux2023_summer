@@ -341,13 +341,9 @@ static void *qsort_thread(void *p)
 again:
     /* Wait for work to be allocated. */
     verify(pthread_mutex_lock(&qs->mtx_st));
-    printf("start qs1 signal\n");
     while (qs->st == ts_idle)
         verify(pthread_cond_wait(&qs->cond_st, &qs->mtx_st));
-
-        // verify(pthread_cond_signal(&qs2->cond_st,&qs->mtx_st));
         // verify(HHHH);
-    printf("end of qs1 signal\n");
     verify(pthread_mutex_unlock(&qs->mtx_st));
     if (qs->st == ts_term) {
         return NULL;
@@ -478,7 +474,6 @@ int main(int argc, char *argv[])
             usage();
         }
     }
-    printf("start\n");
     if (opt_verify && opt_str)
         usage();
 
