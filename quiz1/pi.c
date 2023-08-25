@@ -39,7 +39,7 @@ struct ctx {
 static void ctx_init(struct ctx *ctx)
 {
     mutexattr_t mattr;
-    mutexattr_setprotocol(&mattr, PRIO_INHERIT);
+    CHECK(mutexattr_setprotocol(&mattr, PRIO_INHERIT));
     mutex_init(&ctx->m_t, &mattr);
 }
 
