@@ -5,8 +5,8 @@ ALL := test_pthread test_linux
 
 ALL_M := test_pthread test_linux
 ALL_S := test_qspthread test_qslinux
-
-all: $(ALL_M) $(ALL_S)
+ALL_PI := test_pipthread test_pilinux
+all: $(ALL_M) $(ALL_S) $(ALL_PI)
 .PHONY: all
 
 test_%: main.c atomic.h  cond.h  futex.h  mutex.h  spinlock.h
@@ -20,6 +20,12 @@ test_qs%: qsort_mt.c atomic.h  cond.h  futex.h  mutex.h  spinlock.h
 
 test_qspthread: CFLAGS += -DUSE_PTHREADS
 test_qslinux: CFLAGS += -DUSE_LINUX
+
+test_pi%: pi.c atomic.h  cond.h  futex.h  mutex.h  spinlock.h
+	$(CC) -std=gnu11 $(CFLAGS) pi.c -o $@ $(LDFLAGS)
+
+test_pipthread: CFLAGS += -DUSE_PTHREADS
+test_pilinux: CFLAGS += -DUSE_LINUX
 
 # Test suite
 NAME_S := $(shell uname -s)
@@ -41,9 +47,11 @@ check_main: $(ALL_M)
 check_qsort: $(ALL_S)
 	@$(foreach t,$^,\
 	    $(PRINTF) "Running $(t) ... "; \
-	    ./$(t) -tv && $(call notice, [OK]); \
+	    ./$(t) -t && $(call notice, [OK]); \
 	)
 
+check_pi: $(ALL_PI)
+
 clean:
-	$(RM) $(ALL_M) $(ALL_S)
+	$(RM) $(ALL_M) $(ALL_S) $(ALL_PI)
 .PHONY: clean

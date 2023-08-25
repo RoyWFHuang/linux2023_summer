@@ -5,12 +5,16 @@
 #include <pthread.h>
 
 #define mutex_t pthread_mutex_t
-#define mutex_init(m) pthread_mutex_init(m, NULL)
+#define mutex_init(m, attr) pthread_mutex_init(m, attr)
 #define MUTEX_INITIALIZER PTHREAD_MUTEX_INITIALIZER
 #define mutex_trylock(m) (!pthread_mutex_trylock(m))
 #define mutex_lock pthread_mutex_lock
 #define mutex_unlock pthread_mutex_unlock
 
+#define mutexattr_t pthread_mutexattr_t
+#define mutexattr_setprotocol pthread_mutexattr_setprotocol
+
+#define PRIO_INHERIT PTHREAD_PRIO_INHERIT
 #else
 
 #include <stdbool.h>
